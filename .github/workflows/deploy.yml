@@ -10,21 +10,15 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    # -----------------------------
-    # Step 1: Checkout repo
-    # -----------------------------
     - name: Checkout repository
       uses: actions/checkout@v3
 
-    # -----------------------------
-    # Step 2: Prepare Django package
-    # -----------------------------
     - name: Prepare Django package
       run: |
         rm -rf deploy
         mkdir deploy
 
-        # Copy Django project
+        # Copy Django backend
         cp -r backend/* deploy/
 
         # Create Procfile
@@ -40,17 +34,11 @@ python-dotenv
 EOF
         fi
 
-    # -----------------------------
-    # Step 3: Zip application
-    # -----------------------------
     - name: Zip application
       run: |
         cd deploy
         zip -r ../app.zip .
 
-    # -----------------------------
-    # Step 4: Deploy to Elastic Beanstalk
-    # -----------------------------
     - name: Deploy to Elastic Beanstalk
       uses: einaregilsson/beanstalk-deploy@v21
       with:
