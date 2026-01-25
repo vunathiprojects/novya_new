@@ -30,15 +30,18 @@ jobs:
           # Create Procfile for Django (production-safe)
           echo "web: gunicorn config.wsgi:application --bind 0.0.0.0:8000 --workers 3 --timeout 120 --log-level info" > deploy/Procfile
 
-          # Create requirements.txt if not exists
+          # Ensure requirements.txt exists
           if [ ! -f deploy/requirements.txt ]; then
-            echo "Django>=4.2" > deploy/requirements.txt
-            echo "gunicorn==21.2.0" >> deploy/requirements.txt
-            echo "psycopg2-binary" >> deploy/requirements.txt
-            echo "python-dotenv" >> deploy/requirements.txt
-            echo "djangorestframework" >> deploy/requirements.txt
-            echo "drf-spectacular" >> deploy/requirements.txt
+            touch deploy/requirements.txt
           fi
+
+          # Ensure required packages exist (no duplicates)
+          grep -q "^Django" deploy/requirements.txt || echo "Django>=4.2" >> deploy/requirements.txt
+          grep -q "^gunicorn" deploy/requirements.txt || echo "gunicorn==21.2.0" >> deploy/requirements.txt
+          grep -q "^psycopg2-binary" deploy/requirements.txt || echo "psycopg2-binary" >> deploy/requirements.txt
+          grep -q "^python-dotenv" deploy/requirements.txt || echo "python-dotenv" >> deploy/requirements.txt
+          grep -q "^djangorestframework" deploy/requirements.txt || echo "djangorestframework" >> deploy/requirements.txt
+          grep -q "^drf-spectacular" deploy/requirements.txt || echo "drf-spectacular" >> deploy/requirements.txt
 
       # -----------------------------
       # Step 3: Zip application
