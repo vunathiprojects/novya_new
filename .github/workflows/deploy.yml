@@ -1,4 +1,4 @@
-name: Deploy Django to Elastic Beanstalk
+name: Deploy FastAPI to Elastic Beanstalk
 
 on:
   push:
@@ -6,48 +6,55 @@ on:
       - main
 
 jobs:
-  deploy-django:
+  deploy:
     runs-on: ubuntu-latest
 
     steps:
-      # Checkout code
+      # Step 1: Checkout code
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      # Prepare Django package
-      - name: Prepare Django package
+      # Step 2: Prepare FastAPI package
+      - name: Prepare FastAPI package
         run: |
           rm -rf deploy
           mkdir deploy
-          cp -r backend/* deploy/
 
-          # Procfile for Django
-          echo "web: gunicorn config.wsgi:application --bind 0.0.0.0:8000" > deploy/Procfile
+          # Copy FastAPI backend
+          cp -r backend/ai_backend/* deploy/
+
+          # Create Procfile for FastAPI
+          echo "web: gunicorn app:app -k uvicorn.workers.UvicornWorker --bind 0.0.0.0:8000" > deploy/Procfile
 
           # Ensure requirements.txt exists
           if [ ! -f deploy/requirements.txt ]; then
-            echo "Django>=4.2" >> deploy/requirements.txt
-            echo "gunicorn" >> deploy/requirements.txt
-            echo "psycopg2-binary" >> deploy/requirements.txt
-            echo "python-dotenv" >> deploy/requirements.txt
+            cat <<EOF > deploy/requirements.txt
+fastapi==0.104.1
+uvicorn[standard]==0.24.0
+gunicorn==21.2.0
+python-dotenv==1.0.0
+pydantic==2.5.0
+openai==1.3.0
+psycopg2-binary
+EOF
           fi
 
-      # Zip
-      - name: Zip Django app
+      # Step 3: Zip application
+      - name: Zip application
         run: |
           cd deploy
-          zip -r ../django-app.zip .
+          zip -r ../app.zip .
 
-      # Deploy
-      - name: Deploy Django to Elastic Beanstalk
+      # Step 4: Deploy to Elastic Beanstalk
+      - name: Deploy to Elastic Beanstalk (FastAPI)
         uses: einaregilsson/beanstalk-deploy@v21
         with:
           aws_access_key: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws_secret_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           application_name: Novya-ebk-env
-          environment_name: Novya-ebk-env
+          environment_name: Novya-ebk-env-fastapi
           region: us-east-1
-          version_label: django-${{ github.run_number }}
-          deployment_package: django-app.zip
+          version_label: fastapi-${{ github.run_number }}
+          deployment_package: app.zip
           wait_for_deployment: false
           use_existing_version_if_available: true
