@@ -17,22 +17,22 @@ jobs:
       uses: actions/checkout@v3
 
     # -----------------------------
-    # Step 2: Prepare deployment folder
+    # Step 2: Prepare Django package
     # -----------------------------
     - name: Prepare Django package
       run: |
         rm -rf deploy
         mkdir deploy
 
-        # Copy Django project (adjust path if needed)
+        # Copy Django project
         cp -r backend/* deploy/
 
-        # Create Procfile for Django (Gunicorn + WSGI)
+        # Create Procfile
         echo "web: gunicorn config.wsgi:application --bind 0.0.0.0:8000" > deploy/Procfile
 
         # Create requirements.txt if not exists
         if [ ! -f deploy/requirements.txt ]; then
-          cat <<EOF > deploy/requirements.txt
+          cat > deploy/requirements.txt << 'EOF'
 Django>=4.2
 gunicorn==21.2.0
 psycopg2-binary
