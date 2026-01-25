@@ -10,40 +10,47 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    # Step 1: Checkout code
+    # -----------------------------
+    # Step 1: Checkout repo
+    # -----------------------------
     - name: Checkout repository
       uses: actions/checkout@v3
 
-    # Step 2: Prepare Django app package
+    # -----------------------------
+    # Step 2: Prepare deployment folder
+    # -----------------------------
     - name: Prepare Django package
       run: |
         rm -rf deploy
         mkdir deploy
 
-        # Copy Django backend
+        # Copy Django project (adjust path if needed)
         cp -r backend/* deploy/
 
-        # Create Procfile (IMPORTANT FIX)
+        # Create Procfile for Django (Gunicorn + WSGI)
         echo "web: gunicorn config.wsgi:application --bind 0.0.0.0:8000" > deploy/Procfile
 
-        # Create requirements.txt
-        cat <<EOF > deploy/requirements.txt
-        Django>=4.2
-        gunicorn
-        psycopg2-binary
-        python-dotenv
-        EOF
+        # Create requirements.txt if not exists
+        if [ ! -f deploy/requirements.txt ]; then
+          cat <<EOF > deploy/requirements.txt
+Django>=4.2
+gunicorn==21.2.0
+psycopg2-binary
+python-dotenv
+EOF
+        fi
 
-        # Create application.py for EB auto-detection (CRITICAL)
-        echo "from config.wsgi import application" > deploy/application.py
-
-    # Step 3: Zip app
+    # -----------------------------
+    # Step 3: Zip application
+    # -----------------------------
     - name: Zip application
       run: |
         cd deploy
         zip -r ../app.zip .
 
-    # Step 4: Deploy
+    # -----------------------------
+    # Step 4: Deploy to Elastic Beanstalk
+    # -----------------------------
     - name: Deploy to Elastic Beanstalk
       uses: einaregilsson/beanstalk-deploy@v21
       with:
@@ -52,6 +59,6 @@ jobs:
         application_name: Novya-ebk-env
         environment_name: Novya-ebk-env
         region: us-east-1
-        version_label: v-${{ github.run_number }}
+        version_label: v-${{ github.run_number }}-${{ github.sha }}
         deployment_package: app.zip
-        wait_for_deployment: false
+        wait_for_deployment: true
