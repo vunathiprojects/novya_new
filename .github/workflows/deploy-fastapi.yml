@@ -61,7 +61,7 @@ jobs:
           aws_secret_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           region: us-east-1
           application_name: Novya-ebk-env
-          environment_name: Novya-ebk-env-fastapi
+          environment_name: Novya-ebk-env-fastapi1
           version_label: v-${{ github.run_id }}-${{ github.run_number }}
           deployment_package: app.zip
           wait_for_deployment: false
