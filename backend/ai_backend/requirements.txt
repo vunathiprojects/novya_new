@@ -4,5 +4,7 @@ psycopg2-binary
 python-dotenv
 djangorestframework
 drf-spectacular
-djangorestframework-simplejwt
-setuptools>=65.5.0
+djangorestframework-simplejwt==5.3.1
+setuptools
+wheel
+pip
