@@ -7752,23 +7752,23 @@ Example format:
                             except Exception as regex_direct_err:
                                 logger.warning(f"   Direct regex extraction also failed: {regex_direct_err}")
                         
-                        if not quiz_json:
-                            logger.error(f"❌ Could not parse JSON for attempt {attempt}")
-                            logger.error(f"   Text length: {len(text)} chars")
+                                if not quiz_json:
+                                    logger.error(f"❌ Could not parse JSON for attempt {attempt}")
+                                    logger.error(f"   Text length: {len(text)} chars")
 
-                            question_markers = text.count('"question"')
-                            answer_markers = text.count('"answer"')
-                            options_markers = text.count('"options"')
+                                    question_markers = text.count('"question"')
+                                    answer_markers = text.count('"answer"')
+                                    options_markers = text.count('"options"')
 
-                            logger.error(f"   Question markers found: {question_markers}")
-                            logger.error(f"   Answer markers found: {answer_markers}")
-                            logger.error(f"   Options markers found: {options_markers}")
+                                    logger.error(f"   Question markers found: {question_markers}")
+                                    logger.error(f"   Answer markers found: {answer_markers}")
+                                    logger.error(f"   Options markers found: {options_markers}")
 
-                            if question_count_in_text > 0:
-                               logger.warning(
-                                  f"   ⚠️ Found {question_count_in_text} question markers but couldn't parse - will skip this batch"
-                                )
-                            continue
+                                    if question_count_in_text > 0:
+                                        logger.warning(
+                                            f"   ⚠️ Found {question_count_in_text} question markers but couldn't parse - will skip this batch"
+                                        )
+                                    continue
 
                     
                         # Process questions from this batch
