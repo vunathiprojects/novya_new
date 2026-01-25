@@ -6,4 +6,3 @@ djangorestframework
 drf-spectacular
 djangorestframework-simplejwt
 setuptools
-
