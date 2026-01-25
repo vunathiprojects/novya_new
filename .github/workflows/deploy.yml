@@ -14,19 +14,19 @@ jobs:
     - name: Checkout repository
       uses: actions/checkout@v3
 
-    # Step 2: Prepare Django app
+    # Step 2: Prepare Django app package
     - name: Prepare Django package
       run: |
         rm -rf deploy
         mkdir deploy
 
-        # Copy backend Django project
+        # Copy Django backend
         cp -r backend/* deploy/
 
-        # Create Procfile for Django
+        # Create Procfile (IMPORTANT FIX)
         echo "web: gunicorn config.wsgi:application --bind 0.0.0.0:8000" > deploy/Procfile
 
-        # Create requirements.txt (force correct deps)
+        # Create requirements.txt
         cat <<EOF > deploy/requirements.txt
         Django>=4.2
         gunicorn
@@ -34,13 +34,16 @@ jobs:
         python-dotenv
         EOF
 
-    # Step 3: Zip application
+        # Create application.py for EB auto-detection (CRITICAL)
+        echo "from config.wsgi import application" > deploy/application.py
+
+    # Step 3: Zip app
     - name: Zip application
       run: |
         cd deploy
         zip -r ../app.zip .
 
-    # Step 4: Deploy to Elastic Beanstalk
+    # Step 4: Deploy
     - name: Deploy to Elastic Beanstalk
       uses: einaregilsson/beanstalk-deploy@v21
       with:
