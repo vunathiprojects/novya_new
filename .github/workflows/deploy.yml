@@ -1,4 +1,4 @@
-name: Deploy Django to Elastic Beanstalk
+name: Deploy Django App to Elastic Beanstalk
 
 on:
   push:
@@ -10,44 +10,45 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # Step 1: Checkout code
-      - name: Checkout repository
-        uses: actions/checkout@v3
+    # Step 1: Checkout code
+    - name: Checkout repository
+      uses: actions/checkout@v3
 
-      # Step 2: Prepare Django package
-      - name: Prepare Django package
-        run: |
-          rm -rf deploy
-          mkdir deploy
+    # Step 2: Prepare Django app
+    - name: Prepare Django package
+      run: |
+        rm -rf deploy
+        mkdir deploy
 
-          # Copy Django backend
-          cp -r backend/* deploy/
+        # Copy backend Django project
+        cp -r backend/* deploy/
 
-          # Create Procfile for Django
-          echo "web: gunicorn config.wsgi:application --bind 0.0.0.0:8000" > deploy/Procfile
+        # Create Procfile for Django
+        echo "web: gunicorn config.wsgi:application --bind 0.0.0.0:8000" > deploy/Procfile
 
-          # Create requirements.txt
-          echo "Django>=4.2" > deploy/requirements.txt
-          echo "gunicorn==21.2.0" >> deploy/requirements.txt
-          echo "python-dotenv==1.0.0" >> deploy/requirements.txt
-          echo "psycopg2-binary" >> deploy/requirements.txt
+        # Create requirements.txt (force correct deps)
+        cat <<EOF > deploy/requirements.txt
+        Django>=4.2
+        gunicorn
+        psycopg2-binary
+        python-dotenv
+        EOF
 
-      # Step 3: Zip application
-      - name: Zip application
-        run: |
-          cd deploy
-          zip -r ../app.zip .
+    # Step 3: Zip application
+    - name: Zip application
+      run: |
+        cd deploy
+        zip -r ../app.zip .
 
-      # Step 4: Deploy to Elastic Beanstalk
-      - name: Deploy Django to Elastic Beanstalk
-        uses: einaregilsson/beanstalk-deploy@v21
-        with:
-          aws_access_key: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws_secret_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          application_name: Novya-ebk-env
-          environment_name: Novya-ebk-env
-          region: us-east-1
-          version_label: django-${{ github.run_number }}
-          deployment_package: app.zip
-          wait_for_deployment: false
-          use_existing_version_if_available: true
+    # Step 4: Deploy to Elastic Beanstalk
+    - name: Deploy to Elastic Beanstalk
+      uses: einaregilsson/beanstalk-deploy@v21
+      with:
+        aws_access_key: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws_secret_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        application_name: Novya-ebk-env
+        environment_name: Novya-ebk-env
+        region: us-east-1
+        version_label: v-${{ github.run_number }}
+        deployment_package: app.zip
+        wait_for_deployment: false
