@@ -7753,19 +7753,23 @@ Example format:
                                 logger.warning(f"   Direct regex extraction also failed: {regex_direct_err}")
                         
                         if not quiz_json:
-                            logger.error(f"❌ Could not parse JSON for attempt {attempt} after all strategies")
+                            logger.error(f"❌ Could not parse JSON for attempt {attempt}")
                             logger.error(f"   Text length: {len(text)} chars")
-                            logger.error(f"   Question markers found: {text.count('\"question\"')}")
-                            logger.error(f"   Answer markers found: {text.count('\"answer\"')}")
-                            logger.error(f"   Options markers found: {text.count('\"options\"')}")
-                            # Don't skip yet - try one more time with even more aggressive extraction
+
+                            question_markers = text.count('"question"')
+                            answer_markers = text.count('"answer"')
+                            options_markers = text.count('"options"')
+
+                            logger.error(f"   Question markers found: {question_markers}")
+                            logger.error(f"   Answer markers found: {answer_markers}")
+                            logger.error(f"   Options markers found: {options_markers}")
+
                             if question_count_in_text > 0:
-                                logger.warning(f"   ⚠️ Found {question_count_in_text} question markers but couldn't parse - will skip this batch")
+                               logger.warning(
+                                  f"   ⚠️ Found {question_count_in_text} question markers but couldn't parse - will skip this batch"
+                                )
                             continue
-                    
-                        if not isinstance(quiz_json, list):
-                            logger.warning(f"⚠️ AI response is not a list for attempt {attempt}, will skip")
-                            continue
+
                     
                         # Process questions from this batch
                         processed_batch = []
