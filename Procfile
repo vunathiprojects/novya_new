@@ -1,4 +1,5 @@
-web: gunicorn config.wsgi:application --bind 0.0.0.0:8000
+web: gunicorn backend.ai_backend.app:app --workers 2 --bind 0.0.0.0:8000
+
 
 
 
