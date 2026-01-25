@@ -1,1 +1,30 @@
 
+name: Deploy to Elastic Beanstalk
+
+on:
+  push:
+    branches:
+      - main   # deploy when code is pushed to main branch
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Zip application
+      run: |
+        zip -r app.zip . -x "*.git*" -x "*node_modules*" -x "*.github*"
+
+    - name: Deploy to Elastic Beanstalk
+      uses: einaregilsson/beanstalk-deploy@v21
+      with:
+        aws_access_key: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws_secret_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        application_name: novya-new-app
+        environment_name: novya-new-app-env
+        region: us-east-1
+        version_label: v-${{ github.run_number }}
+        deployment_package: app.zip
