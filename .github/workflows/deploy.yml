@@ -24,7 +24,7 @@ jobs:
         cp -r backend/ai_backend deploy/backend
 
         # Copy requirements
-        cp requirements.txt deploy/
+        cp backend/ai_backend/requirements.txt deploy/requirements.txt
 
         # Create Procfile for FastAPI
         echo "web: gunicorn backend.app:app --workers 2 --bind 0.0.0.0:8000" > deploy/Procfile
