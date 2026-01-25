@@ -1,4 +1,4 @@
-name: Deploy Backend to Elastic Beanstalk
+name: Deploy Django App to Elastic Beanstalk
 
 on:
   push:
@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    # Step 1: Checkout code
+    # Step 1: Checkout repo
     - name: Checkout repository
       uses: actions/checkout@v3
 
@@ -20,13 +20,12 @@ jobs:
         mkdir deploy
         cp -r backend/ai_backend/* deploy/
 
-        # Auto-create Procfile for EB
-        echo "web: gunicorn app:app -k uvicorn.workers.UvicornWorker --bind 0.0.0.0:8000" > deploy/Procfile
+        # Create Procfile for Django
+        echo "web: gunicorn config.wsgi:application --bind 0.0.0.0:8000" > deploy/Procfile
 
         # Ensure requirements.txt exists
         if [ ! -f deploy/requirements.txt ]; then
-          echo "fastapi" >> deploy/requirements.txt
-          echo "uvicorn" >> deploy/requirements.txt
+          echo "Django" >> deploy/requirements.txt
           echo "gunicorn" >> deploy/requirements.txt
           echo "psycopg2-binary" >> deploy/requirements.txt
           echo "python-dotenv" >> deploy/requirements.txt
@@ -51,3 +50,4 @@ jobs:
         deployment_package: app.zip
         wait_for_deployment: false
 
+        
