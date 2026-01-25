@@ -27,7 +27,7 @@ SECRET_KEY = config('SECRET_KEY', default='django-insecure-your-secret-key-here'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = config('DEBUG', default=True, cast=bool)
 
-ALLOWED_HOSTS = ['localhost', '127.0.0.1', '0.0.0.0', 'Novya-ebk-env-django.eba-uj5qefsc.us-east-1.elasticbeanstalk.com']
+ALLOWED_HOSTS = ['localhost', '127.0.0.1', '0.0.0.0', 'Novya-ebk-env-django.eba-uj5qefsc.us-east-1.elasticbeanstalk.com', 'Novya-ebk-env-fastapi.eba-uj5qefsc.us-east-1.elasticbeanstalk.com']
 
 
 # Application definition
