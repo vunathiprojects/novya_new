@@ -62,7 +62,7 @@ jobs:
           aws_secret_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
 
           application_name: Novya-ebk-env
-          environment_name: Novya-ebk-env
+          environment_name: Novya-ebk-env-django
           region: us-east-1
 
           version_label: v-${{ github.run_number }}-${{ github.run_id }}
