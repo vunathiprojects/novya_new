@@ -58,7 +58,7 @@ class StudentRegistration(models.Model):
     student_username = models.CharField(max_length=255, unique=True)
     student_email = models.EmailField(unique=True, null=True, blank=True)
     parent_email = models.EmailField(null=True, blank=True)  # Optional - will be set in student profile after registration
-    student_password = models.CharField(max_length=255)  # This will be hashed
+    #student_password = models.CharField(max_length=255)  # This will be hashed
     grade = models.CharField(max_length=50, null=True, blank=True)
     school = models.CharField(max_length=150, null=True, blank=True)
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='pending')
