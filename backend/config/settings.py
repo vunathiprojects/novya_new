@@ -107,10 +107,10 @@ ASGI_APPLICATION = 'config.asgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'novya',  # Your database name
-        'USER': 'postgres',
-        'PASSWORD': '12345',  # Your PostgreSQL password
-        'HOST': 'localhost',
+        'NAME': 'postgres',  # Your database name
+        'USER': 'postgres_novya',
+        'PASSWORD': 'sa!S#nday%4567',  
+        'HOST': 'novyadatabase.cu7o0gw6ifh6.us-east-1.rds.amazonaws.com',
         'PORT': '5432',
     }
 }
