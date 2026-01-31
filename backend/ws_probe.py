@@ -7,7 +7,7 @@ import websockets
 TOKEN_PATH = Path("token.txt")
 TOKEN = TOKEN_PATH.read_text().strip() if TOKEN_PATH.exists() else ""
 FRIEND_ID = 3
-URI = f"ws://127.0.0.1:8001/ws/{FRIEND_ID}?token={quote(TOKEN)}"
+URI = f"ws://novya-ebk-env-django.eba-uj5qefsc.us-east-1.elasticbeanstalk.com/ws/{FRIEND_ID}?token={quote(TOKEN)}"
 
 
 MESSAGE = "Hello from probe"
