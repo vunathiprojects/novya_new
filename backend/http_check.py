@@ -12,7 +12,7 @@ def main() -> None:
     if not token:
         raise SystemExit("token.txt is empty")
 
-    url = "http://127.0.0.1:8001/friends/2"
+    url = "http://novya-ebk-env-django.eba-uj5qefsc.us-east-1.elasticbeanstalk.com/friends/2"
     resp = requests.get(url, headers={"Authorization": f"Bearer {token}"})
     print(f"status={resp.status_code}")
     print(resp.text)
