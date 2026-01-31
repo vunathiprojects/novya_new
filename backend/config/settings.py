@@ -27,7 +27,7 @@ SECRET_KEY = config('SECRET_KEY', default='django-insecure-your-secret-key-here'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = config('DEBUG', default=True, cast=bool)
 
-ALLOWED_HOSTS = ['localhost', '127.0.0.1', '0.0.0.0', 'Novya-ebk-env-django.eba-uj5qefsc.us-east-1.elasticbeanstalk.com', 'Novya-ebk-env-fastapi1.eba-uj5qefsc.us-east-1.elasticbeanstalk.com']
+ALLOWED_HOSTS = ['localhost', '0.0.0.0', 'Novya-ebk-env-django.eba-uj5qefsc.us-east-1.elasticbeanstalk.com', 'Novya-ebk-env-fastapi1.eba-uj5qefsc.us-east-1.elasticbeanstalk.com']
 
 
 # Application definition
@@ -226,14 +226,12 @@ SIMPLE_JWT = {
     'SLIDING_TOKEN_LIFETIME': timedelta(minutes=5),
     'SLIDING_TOKEN_REFRESH_LIFETIME': timedelta(days=1),
 }
-
-# CORS Settings
 CORS_ALLOWED_ORIGINS = [
-    "http://localhost:3000",
-    "http://127.0.0.1:3000",   
-    "http://localhost:3001",
-    "http://127.0.0.1:3001",
+    "http://novyas3.s3-website-us-east-1.amazonaws.com",
+    "http://Novya-ebk-env-django.eba-uj5qefsc.us-east-1.elasticbeanstalk.com",
+    "http://Novya-ebk-env-fastapi1.eba-uj5qefsc.us-east-1.elasticbeanstalk.com",
 ]
+
 
 CORS_ALLOW_CREDENTIALS = True
 
